@@ -1,0 +1,19 @@
+[package]
+name = "tpm-box"
+version = "0.1.0"
+edition = "2021"
+authors = ["Wiktor Kwapisiewicz <wiktor@metacode.biz>"]
+description = "Temporary secret encryption using TPM"
+repository = "https://github.com/wiktor-k/tpm-box"
+license = "MIT OR Apache-2.0"
+keywords = ["tpm"]
+categories = []
+exclude = [".github"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+tss-esapi={ version = "7", path ="../../pep/rust-tss-esapi/tss-esapi" }
+
+[dev-dependencies]
+testresult = "0.3.0"
