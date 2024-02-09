@@ -13,7 +13,7 @@ exclude = [".github"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-tss-esapi={ version = "7", path ="../../pep/rust-tss-esapi/tss-esapi" }
+tss-esapi={ version = "8.0.0-alpha", features = ["generate-bindings"] }
 
 [dev-dependencies]
 testresult = "0.3.0"
