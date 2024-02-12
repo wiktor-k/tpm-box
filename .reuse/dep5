@@ -1,0 +1,8 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: tpm-box
+Upstream-Contact: Wiktor Kwapisiewicz <wiktor@metacode.biz>
+Source: https://github.com/wiktor-k/tpm-box
+
+Files: Cargo.lock NVChip
+Copyright: 2024 Wiktor Kwapisiewicz <wiktor@metacode.biz>
+License: CC0-1.0

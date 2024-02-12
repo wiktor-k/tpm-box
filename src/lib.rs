@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 Wiktor Kwapisiewicz <wiktor@metacode.biz>
+// SPDX-License-Identifier: Apache-2.0 OR MIT
+
 #![doc = include_str!("../README.md")]
 #![deny(missing_docs)]
 
@@ -6,7 +9,6 @@ use std::str::FromStr;
 use tss_esapi::attributes::ObjectAttributesBuilder;
 use tss_esapi::handles::KeyHandle;
 use tss_esapi::interface_types::algorithm::{HashingAlgorithm, PublicAlgorithm, SymmetricMode};
-
 use tss_esapi::interface_types::resource_handles::Hierarchy;
 use tss_esapi::interface_types::session_handles::AuthSession;
 use tss_esapi::structures::{
@@ -101,32 +103,33 @@ impl TpmBox {
     }
 
     /// IOs OK.
-    fn encrypt_decrypt(&mut self, data: impl AsRef<[u8]>, decrypt: bool) -> Result<impl AsRef<[u8]>>
-    {
+    fn encrypt_decrypt(
+        &mut self,
+        data: impl AsRef<[u8]>,
+        decrypt: bool,
+    ) -> Result<impl AsRef<[u8]>> {
         let data = MaxBuffer::from_bytes(data.as_ref())?;
-        let (encrypted_data, _initial_value_out) =
-            self.context
-                .execute_with_session(Some(AuthSession::Password), |ctx| {
-                    ctx.encrypt_decrypt_2(
-                        self.symmetric_key_handle,
-                        decrypt,
-                        SymmetricMode::Cfb,
-                        data,
-                        self.initial_value.clone(),
-                    )
-                })?;
-        Ok(encrypted_data)
+        Ok(self
+            .context
+            .execute_with_session(Some(AuthSession::Password), |ctx| {
+                ctx.encrypt_decrypt_2(
+                    self.symmetric_key_handle,
+                    decrypt,
+                    SymmetricMode::Cfb,
+                    data,
+                    self.initial_value.clone(),
+                )
+            })?
+            .0)
     }
 
     /// Encrypts a piece of data.
-    pub fn encrypt(&mut self, data: impl AsRef<[u8]>) -> Result<impl AsRef<[u8]>>
-    {
+    pub fn encrypt(&mut self, data: impl AsRef<[u8]>) -> Result<impl AsRef<[u8]>> {
         self.encrypt_decrypt(data, false)
     }
 
     /// Decrypts a piece of data.
-    pub fn decrypt(&mut self, data: impl AsRef<[u8]>) -> Result<impl AsRef<[u8]>>
-    {
+    pub fn decrypt(&mut self, data: impl AsRef<[u8]>) -> Result<impl AsRef<[u8]>> {
         self.encrypt_decrypt(data, true)
     }
 }
@@ -134,11 +137,10 @@ impl TpmBox {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use testresult::TestResult;
 
     #[test]
-    fn seal_unseal_works() -> TestResult {
-        let mut data = TpmBox::new("device:/dev/tpmrm0")?;
+    fn seal_unseal_works() -> testresult::TestResult {
+        let mut data = TpmBox::new("mssim:")?;
         let plaintext = vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 16];
         let ciphertext = data.encrypt(&plaintext)?;
         let unsealed = data.decrypt(&ciphertext)?;
