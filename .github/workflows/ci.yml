@@ -33,9 +33,3 @@ jobs:
         run: cargo install cargo-edit && \
              cargo set-version "${GITHUB_REF:11}" && \
              cargo publish --allow-dirty --token ${{ secrets.CARGO_REGISTRY_TOKEN }}
-
-  dco:
-    name: Developer's Certificate of Origin
-    runs-on: ubuntu-latest
-    steps:
-      - uses: tisonkun/actions-dco@v1.1
