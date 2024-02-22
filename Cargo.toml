@@ -3,7 +3,6 @@
 
 [package]
 name = "tpm-box"
-version = "0.1.0"
 edition = "2021"
 authors = ["Wiktor Kwapisiewicz <wiktor@metacode.biz>"]
 description = "Temporary secret encryption using TPM"
